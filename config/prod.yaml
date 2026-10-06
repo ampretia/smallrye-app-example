@@ -1,0 +1,19 @@
+# External YAML file (ordinal 275), selected with --app.config-file=config/prod.yaml
+# or APP_CONFIG_FILE=config/prod.yaml. Only keys present here override the packaged file.
+app:
+  env: prod
+  port: 80
+  worker-threads: 16
+  log-level: warn
+  proxy: proxy.corp:3128
+  server:
+    tls:
+      keystore: /etc/app/keystore.p12
+      password: ${KEYSTORE_PASSWORD:changeit}
+  datasources:
+    orders:
+      url: jdbc:postgresql://prod-db:5432/orders
+      password: ${ORDERS_DB_PASSWORD:not-set}
+    # A new map entry, merged with the ones from the packaged file
+    inventory:
+      url: jdbc:postgresql://prod-db:5432/inventory

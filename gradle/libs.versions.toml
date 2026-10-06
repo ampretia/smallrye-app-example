@@ -1,0 +1,7 @@
+[versions]
+smallrye-config = "4.0.0"
+junit = "6.0.1"
+
+[libraries]
+smallrye-config = { module = "io.smallrye.config:smallrye-config", version.ref = "smallrye-config" }
+smallrye-config-source-yaml = { module = "io.smallrye.config:smallrye-config-source-yaml", version.ref = "smallrye-config" }

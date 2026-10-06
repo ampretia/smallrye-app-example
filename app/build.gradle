@@ -1,0 +1,38 @@
+plugins {
+    id 'application'
+}
+
+repositories {
+    mavenCentral()
+}
+
+dependencies {
+    // Core SmallRye Config: SmallRyeConfigBuilder, @ConfigMapping, converters, profiles, expressions.
+    // No CDI / Jakarta EE container is needed - the builder is used directly from main().
+    implementation libs.smallrye.config
+    // Adds YAML file support (application.yaml / external YAML files).
+    implementation libs.smallrye.config.source.yaml
+}
+
+testing {
+    suites {
+        test {
+            useJUnitJupiter(libs.versions.junit.get())
+        }
+    }
+}
+
+java {
+    toolchain {
+        languageVersion = JavaLanguageVersion.of(21)
+    }
+}
+
+application {
+    mainClass = 'org.example.App'
+}
+
+// Lets `./gradlew run --args="..."` read from a relative --config-file path in the project root.
+tasks.named('run') {
+    workingDir = rootProject.projectDir
+}

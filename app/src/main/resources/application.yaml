@@ -1,0 +1,77 @@
+# Packaged defaults (ordinal 250). Anything here can be overridden by an external file,
+# environment variables, system properties or command-line arguments.
+#
+# YAML is flattened to dotted keys: app.server.host, app.endpoints[0].url, ...
+
+app:
+  name: smallrye-example
+  # ${...} expressions are expanded at lookup time and can reference any source.
+  # ${key:fallback} supplies a value when the key is missing.
+  description: "${app.name} (${app.env}) listening on ${app.server.host}:${app.server.port}"
+
+  # Primitives
+  port: 8080
+  debug: false
+  sample-rate: 0.5
+  max-payload-bytes: 2097152
+
+  # Built-in converters
+  log-level: info
+  request-timeout: PT10S
+  homepage: https://example.org
+
+  # Simple list as a YAML sequence (flattened to app.tags[0], app.tags[1])
+  tags:
+    - demo
+    - config
+
+  # Custom converter: list of host:port
+  peers: "node-a:7000,node-b:7000"
+
+  # Nested group
+  server:
+    host: 0.0.0.0
+    port: 8443
+
+  # Map of groups: the keys "orders" and "customers" are chosen here, not in code
+  datasources:
+    orders:
+      url: jdbc:postgresql://db:5432/orders
+      pool-size: 20
+    customers:
+      url: jdbc:postgresql://db:5432/customers
+      username: reader
+
+  # List of groups
+  endpoints:
+    - name: billing
+      url: https://billing.internal/api
+      headers:
+        Accept: application/json
+    - name: audit
+      url: https://audit.internal/api
+      retries: 5
+
+  # Free-form map
+  labels:
+    team: platform
+    tier: backend
+
+  # Free-form groups (@WithParentName): any keys under each plugin name
+  plugins:
+    s3:
+      bucket: example-bucket
+      region: eu-de
+    metrics:
+      enabled: false
+      interval: 15s
+
+# Profile-specific overrides. Activate with --smallrye.config.profile=dev
+# or SMALLRYE_CONFIG_PROFILE=dev. Only the listed keys change.
+"%dev":
+  app:
+    env: dev
+    debug: true
+    log-level: debug
+    server:
+      host: localhost
